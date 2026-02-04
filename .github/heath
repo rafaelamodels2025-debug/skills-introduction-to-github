@@ -1,0 +1,24 @@
+Projeto-Jockey/
+│
+├── security/
+│   ├── bullying_detector.py
+│   ├── audio_buffer.py
+│   ├── encryption.py
+│
+├── health/   👈 ESSA FALTA
+│   ├── stress_detector.py
+│   ├── heart_rate_sensor.py
+│   ├── accelerometer.py
+│   └── audio_feedback.py
+│
+├── power/
+│   └── nvpmodel_manager.py
+│
+├── ota/
+│   └── ota_manager.py
+│
+├── core/
+│   └── event_bus.py
+│
+├── main.py
+└── README.md
