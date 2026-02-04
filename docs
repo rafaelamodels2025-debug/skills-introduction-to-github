@@ -1,0 +1,60 @@
+project_jockey/
+│
+├── core/
+│   ├── power_manager.py
+│   ├── logger.py
+│   ├── encryption.py
+│
+├── sensors/
+│   ├── heart_rate.py
+│   ├── accelerometer.py
+│   ├── microphone.py
+│
+├── ai/
+│   ├── stress_detector.py
+│   ├── audio_aggression_detector.py
+│
+├── modules/
+│   ├── health_tourette.py
+│   ├── security_bullying.py
+│
+├── communication/
+│   ├── audio_feedback.py
+│   ├── api_client.py
+│
+└── main.py# core/power_manager.py
+
+class PowerManager:
+    def __init__(self):
+        self.sleep_mode = False
+
+    def enter_sleep_mode(self):
+        self.sleep_mode = True
+        print("[POWER] Entering low power mode (TensorRT idle)")
+
+    def exit_sleep_mode(self):
+        self.sleep_mode = False
+        print("[POWER] Exiting sleep mode")
+
+    def should_sleep(self, health_ok: bool, security_ok: bool) -> bool:
+        return health_ok and security_ok[04/02, 08:21] Rafaela: # sensors/heart_rate.py
+
+class HeartRateSensor:
+    def read(self) -> int:
+        # Simulação
+        return 72
+ # sensors/accelerometer.py
+
+class Accelerometer:
+    def read(self) -> dict:
+        return {"x": 0.01, "y": 0.02, "z": 0.98}
+ # ai/stress_detector.py
+
+class StressDetector:
+    def __init__(self, model_path: str):
+        self.model_path = model_path  # TensorRT engine futuramente
+
+    def detect(self, heart_rate: int, accel_data: dict) -> bool:
+        if heart_rate > 100 and abs(accel_data["x"]) > 0.5:
+            return True
+        return False
