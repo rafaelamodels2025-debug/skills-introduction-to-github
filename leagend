@@ -1,0 +1,141 @@
+# ai/stress_detector.py
+
+class StressDetector:
+    def __init__(self, model_path: str):
+        self.model_path = model_path  # TensorRT engine futuramente
+
+    def detect(self, heart_rate: int, accel_data: dict) -> bool:
+        if heart_rate > 100 and abs(accel_data["x"]) > 0.5:
+            return True
+        return False
+ # communication/audio_feedback.py
+
+class AudioFeedback:
+    def play_calming_audio(self):
+        print("[AUDIO] Playing calming audio via Bluetooth/I2S")
+# modules/health_tourette.py
+
+class HealthTouretteModule:
+    def __init__(self, hr_sensor, accel, detector, audio):
+        self.hr_sensor = hr_sensor
+        self.accel = accel
+        self.detector = detector
+        self.audio = audio
+
+    def run_cycle(self) -> bool:
+        hr = self.hr_sensor.read()
+        accel = self.accel.read()
+
+        stress = self.detector.detect(hr, accel)
+        if stress:
+            self.audio.play_calming_audio()
+            return False  # Não está em estado normal
+
+        return True
+# sensors/microphone.py
+
+from collections import deque
+
+class Microphone:
+    def __init__(self, buffer_size=16000):
+        self.buffer = deque(maxlen=buffer_size)
+
+    def capture(self, audio_chunk: bytes):
+        self.buffer.append(audio_chunk)
+
+    def get_buffer(self):
+        return list(self.buffer)
+[04/02, 08:21] Rafaela: # ai/audio_aggression_detector.py
+
+class AudioAggressionDetector:
+    KEYWORDS = ["idiota", "burro", "retardado"]
+
+    def analyze(self, audio_text: str, decibel: float) -> bool:
+        if decibel > 85:
+            return True
+        for word in self.KEYWORDS:
+            if word in audio_text.lower():
+                return True
+        return False
+[04/02, 08:21] Rafaela: # core/encryption.py
+
+class Encryptor:
+    def encrypt(self, data: bytes) -> bytes:
+        return b"ENCRYPTED_" + data
+[04/02, 08:22] Rafaela: # modules/security_bullying.py
+
+class SecurityBullyingModule:
+    def __init__(self, mic, detector, encryptor):
+        self.mic = mic
+        self.detector = detector
+        self.encryptor = encryptor
+
+    def run_cycle(self, audio_text: str, decibel: float) -> bool:
+        aggression = self.detector.analyze(audio_text, decibel)
+
+        if aggression:
+            raw_audio = b"".join(self.mic.get_buffer())
+            encrypted = self.encryptor.encrypt(raw_audio)
+            print("[SECURITY] Aggression detected. Data encrypted.")
+            return False
+
+        return True
+ # communication/api_client.py
+
+import json
+import time
+
+class AlertAPIClient:
+    LEVELS = ["Diretoria", "Pais", "Autoridades"]
+
+    def send_alert(self, level: str, payload: dict):
+        print(f"[API] Sending alert to {level}")
+        print(json.dumps(payload))
+
+    def escalate(self, base_payload: dict):
+        for level in self.LEVELS:
+            try:
+                self.send_alert(level, base_payload)
+                time.sleep(0.5)
+            except Exception:
+                print(f"[LOG] Omission detected at level {level}")
+# main.py
+
+from core.power_manager import PowerManager
+from sensors.heart_rate import HeartRateSensor
+from sensors.accelerometer import Accelerometer
+from sensors.microphone import Microphone
+from ai.stress_detector import StressDetector
+from ai.audio_aggression_detector import AudioAggressionDetector
+from communication.audio_feedback import AudioFeedback
+from core.encryption import Encryptor
+from modules.health_tourette import HealthTouretteModule
+from modules.security_bullying import SecurityBullyingModule
+
+def main():
+    power = PowerManager()
+
+    health = HealthTouretteModule(
+        HeartRateSensor(),
+        Accelerometer(),
+        StressDetector("stress.trt"),
+        AudioFeedback()
+    )
+
+    security = SecurityBullyingModule(
+        Microphone(),
+        AudioAggressionDetector(),
+        Encryptor()
+    )
+
+    while True:
+        health_ok = health.run_cycle()
+        security_ok = security.run_cycle("fala simulada", 40)
+
+        if power.should_sleep(health_ok, security_ok):
+            power.enter_sleep_mode()
+        else:
+            power.exit_sleep_mode()
+
+if __name__ == "__main__":
+    main()
